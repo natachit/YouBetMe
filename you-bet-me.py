@@ -12,18 +12,24 @@ class YouBetMeWindow(arcade.Window):
         self.world = World()
  
         arcade.set_background_color(arcade.color.WHITE)
-        self.box = arcade.Sprite('images/box.png')
-        self.box.set_position(305, 325)
-        self.box2 = arcade.Sprite('images/box.png')
-        self.box2.set_position(545, 325)
+        self.box_img = arcade.Sprite('images/box.png')
+        self.box_img.set_position(305, 325)
+        self.box2_img = arcade.Sprite('images/box.png')
+        self.box2_img.set_position(545, 325)
+        self.heart_img = arcade.Sprite('images/heart1.png')
+        self.heart_img.set_position(30, 575)
+        self.heart2_img = arcade.Sprite('images/heart1.png')
+        self.heart2_img.set_position(350, 190)
  
  
     def on_draw(self):
         arcade.start_render()
-        self.box.draw()
-        self.box2.draw()
+        self.box_img.draw()
+        self.box2_img.draw()
+        self.heart_img.draw()
+        self.heart2_img.draw()
         arcade.draw_text(str(self.world.heart),
-                         10, self.height - 30,
+                         60, self.height - 35,
                          arcade.color.BLACK, 20)
         arcade.draw_text(str(self.choice.list[self.world.question-1][0]),
                          305, 325, arcade.color.BLACK, 30, width=223, align="center",
@@ -32,9 +38,9 @@ class YouBetMeWindow(arcade.Window):
                          545, 325, arcade.color.BLACK, 30, width=223, align="center",
                          anchor_x="center", anchor_y="center")
         if (not self.world.is_ans):
-            arcade.draw_text(str(self.world.bet), 400, 180, arcade.color.RED, 20)
+            arcade.draw_text(': '+str(self.world.bet), 380, 180, arcade.color.RED, 20)
         if (self.world.is_ans):
-            arcade.draw_text(str(self.world.bet), 400, 180, arcade.color.BLACK, 20)
+            arcade.draw_text(': '+str(self.world.bet), 380, 180, arcade.color.BLACK, 20)
 
     def on_key_press(self, key, key_modifiers):
         right_choice = self.choice.random_answer()
@@ -67,7 +73,7 @@ class World():
         if 48 <= key <= 57:
             tmp = self.num_key[key]
             self.convert_input(True, tmp)
-        if int(self.bet) >= 2000:
+        if 2000 <= int(self.bet) <= self.heart:
             self.is_ans = True
 
     def reset(self):
