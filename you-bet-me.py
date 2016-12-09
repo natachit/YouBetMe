@@ -62,12 +62,17 @@ class YouBetMeWindow(arcade.Window):
             self.ans_img.set_position(BOX_POS[check_render[2]][0], BOX_POS[check_render[2]][1])
             self.ans_img.draw()
 
-        arcade.draw_text(str(self.world.count_right)+" "+str(self.world.is_ans[1])+" "+str(self.world.ans_tmp),100,100,arcade.color.BLACK, 20)
+        if not self.world.can_ans:
+            if self.world.bet < 2000:
+                arcade.draw_text('Too low',380,130,arcade.color.RED, 15)
+            if self.world.bet > self.world.heart:
+                arcade.draw_text('Too high',380,130,arcade.color.RED, 15)
 
 
     def on_key_press(self, key, key_modifiers):
         self.right_choice = self.choice.random_answer()
         self.world.on_key_press(key, key_modifiers, self.right_choice)
+
 
 
 class World():
@@ -80,10 +85,6 @@ class World():
         self.can_ans = False
         self.tmp = 0
         self.is_ans = [False, None, 0]    #false=not answer yet, None=right or wrong, 0=right choice
-        self.count_right = 0
-        self.count_wrong = 0
-        self.ans_tmp = None
-        self.is_continue = [False, None]  #not continue, None ans_tmp
 
 
     def on_key_press(self, key, key_modifiers, right_choice):
@@ -113,8 +114,9 @@ class World():
             self.tmp = self.num_key[key]
             self.convert_input(True, self.tmp)
 
-        if 2000 <= int(self.bet) <= self.heart and not self.is_ans[0]:
-            self.can_ans = True
+        #if 2000 <= self.bet and not self.is_ans[0]:
+        #   if self.bet <= self.heart:
+    #        self.can_ans = True
 
         if key == arcade.key.ENTER and self.is_ans[0]:
             self.reset()
@@ -125,7 +127,6 @@ class World():
         self.can_ans = False
         self.bet = 0
         self.question += 1
-        self.ans_tmp = self.is_ans[1]
         self.is_ans = [False, None, 0] 
 
 
@@ -136,43 +137,17 @@ class World():
         if (self.ans != right_choice):
             self.heart -= self.bet
             self.is_ans = [True, False, self.ans-1]
-        self.check_continue()
 
 
     def convert_input(self, is_value, value):
         if not is_value:
             self.bet = int((self.bet-value)/10)
-        else:
+        if is_value:
             self.bet = int(self.bet*10+value)
-
-
-    def check_continue(self):
-        if self.question == 1:
-            self.ans_tmp = self.is_ans[1]
-            return
-
-        if self.is_ans[1] == self.ans_tmp:
-            self.count_right += 1
-
-        if self.is_ans[1] == self.ans_tmp == False:
-            self.count_wrong += 1
-
-        if self.count_right == 3:
-            self.is_continue = [True, True]
-            self.reset_count()
-
-        if self.count_wrong == 3:
-            self.is_continue = [True, False]
-            self.reset_count()
-
-        else:
-            self.reset_count()
-
-
-    def reset_count(self):
-        self.count_right = 0
-        self.count_wrong = 0
-        
+        if self.heart >= self.bet >= 2000:
+            self.can_ans = True
+        else: 
+            self.can_ans = False
 
 
  
