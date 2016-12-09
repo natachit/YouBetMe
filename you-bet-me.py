@@ -53,6 +53,9 @@ class World():
         self.tmp = 0
 
     def on_key_press(self, key, key_modifiers, right_choice):
+        if key == arcade.key.C and self.is_ans:
+            self.ans = 3
+            self.check_ans(3)
         if key == arcade.key.LEFT and self.is_ans:
             self.ans = 1
             self.check_ans(right_choice)
