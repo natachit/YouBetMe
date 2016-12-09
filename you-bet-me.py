@@ -31,7 +31,7 @@ class YouBetMeWindow(arcade.Window):
         arcade.draw_text(str(self.choice.list[self.world.question-1][1]),
                          545, 325, arcade.color.BLACK, 30, width=223, align="center",
                          anchor_x="center", anchor_y="center")
-        arcade.draw_text(str(self.world.input), 10, 10,
+        arcade.draw_text(self.world.input, 400, 180,
                          arcade.color.BLACK, 20)
 
     def on_key_press(self, key, key_modifiers):
@@ -60,11 +60,7 @@ class World():
         if 48 <= key <= 57:
             tmp = str(self.num_key[key])
             self.input += tmp
-            self.bet = 0
-            
-        #else:
-           # self.input += str(key)
-
+            self.bet = int(self.input)
 
 
  
