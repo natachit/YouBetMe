@@ -35,8 +35,14 @@ class YouBetMeWindow(arcade.Window):
             arcade.draw_text(str(self.choice.list[self.world.question-1][0]),
                             305, 325, arcade.color.BLACK, 30, width=223, align="center",
                             anchor_x="center", anchor_y="center")
+            arcade.draw_text('Press Left Key',
+                            305, 270, arcade.color.GRAY, 12, width=223, align="center",
+                            anchor_x="center", anchor_y="center")
             arcade.draw_text(str(self.choice.list[self.world.question-1][1]),
                             545, 325, arcade.color.BLACK, 30, width=223, align="center",
+                            anchor_x="center", anchor_y="center")
+            arcade.draw_text('Press Right Key',
+                            545, 270, arcade.color.GRAY, 12, width=223, align="center",
                             anchor_x="center", anchor_y="center")
             if not self.world.can_ans:
                 arcade.draw_text(': '+str(self.world.bet), 380, 180, arcade.color.RED, 20)
@@ -58,6 +64,7 @@ class YouBetMeWindow(arcade.Window):
                             anchor_x="center", anchor_y="center")
                 self.ans_img.set_position(BOX_POS[check_render[2]][0], BOX_POS[check_render[2]][1])
                 self.ans_img.draw()
+                arcade.draw_text('Press Enter to continue',300,130,arcade.color.GRAY, 15)
 
             if not self.world.can_ans:
                 if self.world.bet < 2000:
