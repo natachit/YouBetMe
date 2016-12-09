@@ -22,26 +22,34 @@ class YouBetMeWindow(arcade.Window):
         arcade.start_render()
         self.box.draw()
         self.box2.draw()
-        arcade.draw_text(str(self.choice.heart),
+        arcade.draw_text(str(self.world.heart),
                          10, self.height - 30,
                          arcade.color.BLACK, 20)
         arcade.draw_text(str(self.choice.list[self.world.question-1][0]),
-                         285, 310,
-                         arcade.color.BLACK, 40)
+                         305, 325, arcade.color.BLACK, 30, width=223, align="center",
+                         anchor_x="center", anchor_y="center")
         arcade.draw_text(str(self.choice.list[self.world.question-1][1]),
-                         525, 310,
-                         arcade.color.BLACK, 40)
+                         545, 325, arcade.color.BLACK, 30, width=223, align="center",
+                         anchor_x="center", anchor_y="center")
+
+    def on_key_press(self, key, key_modifiers):
+        choice = self.choice.random_answer()
+        self.world.on_key_press(key, key_modifiers, choice)
 
 class World():
-    question = 1
-    ans = 0
-    def on_key_press(self, key, key_modifiers):
+    def __init__(self):
+        self.heart = 5000
+        self.question = 1
+        self.ans = 0
+
+    def on_key_press(self, key, key_modifiers, choice):
         if key == arcade.key.LEFT:
-            ans = 1
+            self.ans = 1
         if key == arcade.key.RIGHT:
-            ans = 2
-        if choice.random_answer() == ans-1:
-            question+=1
+            self.ans = 2
+        if choice == self.ans-1:
+            self.question+=1
+
 
  
 if __name__ == '__main__':
