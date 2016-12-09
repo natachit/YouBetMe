@@ -48,8 +48,8 @@ class YouBetMeWindow(arcade.Window):
                 self.ans_img = arcade.Sprite('images/right.png')
             if not check_render[1]:
                 self.ans_img = arcade.Sprite('images/wrong.png')
-            #self.ans_img.set_position(BOX_POS[check_render[2]][0], BOX_POS[check_render[2][1]])
-            self.ans_img.set_position(BOX_POS[0][0], BOX_POS[0][1])
+            self.ans_img.set_position(BOX_POS[check_render[2]][0], BOX_POS[check_render[2]][1])
+            #self.ans_img.set_position(BOX_POS[0][0], BOX_POS[0][1])
             self.ans_img.draw()
         #if self.world.end_round:
 
