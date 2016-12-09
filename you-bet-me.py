@@ -1,4 +1,5 @@
 import arcade
+from choice import Choice
  
 SCREEN_WIDTH = 850
 SCREEN_HEIGHT = 600
