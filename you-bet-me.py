@@ -21,6 +21,7 @@ class YouBetMeWindow(arcade.Window):
         self.heart_img.set_position(30, 575)
         self.heart2_img = arcade.Sprite('images/heart1.png')
         self.heart2_img.set_position(350, 190)
+        self.right_choice = 0
  
 
     def on_draw(self):
@@ -48,17 +49,15 @@ class YouBetMeWindow(arcade.Window):
                 self.ans_img = arcade.Sprite('images/right.png')
             if not check_render[1]:
                 self.ans_img = arcade.Sprite('images/wrong.png')
+            #arcade.draw_text(str(self.right_choice),100,100,arcade.color.BLACK, 20)     #print right answer
             self.ans_img.set_position(BOX_POS[check_render[2]][0], BOX_POS[check_render[2]][1])
-            #self.ans_img.set_position(BOX_POS[0][0], BOX_POS[0][1])
             self.ans_img.draw()
-        #if self.world.end_round:
 
 
 
     def on_key_press(self, key, key_modifiers):
-        right_choice = self.choice.random_answer()
-        self.world.on_key_press(key, key_modifiers, right_choice)
-
+        self.right_choice = self.choice.random_answer()
+        self.world.on_key_press(key, key_modifiers, self.right_choice)
 
 
 class World():
@@ -72,15 +71,21 @@ class World():
         self.bet = 0
         self.can_ans = False
         self.tmp = 0
-        self.is_ans = [False, None, 0]
+        self.is_ans = [False, None, 0]    #false=not answer yet, None=right or wrong, 0=right choice
         self.next = False
         self.end_round = False
 
 
     def on_key_press(self, key, key_modifiers, right_choice):
         if key == arcade.key.C and self.can_ans and not self.is_ans[0]:
-            self.ans = 3
-            self.check_ans(3)
+            self.ans = right_choice
+            self.check_ans(right_choice)
+        if key == arcade.key.V and self.can_ans and not self.is_ans[0]:
+            if right_choice == 1:
+                self.ans = 2
+            if right_choice == 2:
+                self.ans = 1
+            self.check_ans(right_choice)
         if key == arcade.key.LEFT and self.can_ans and not self.is_ans[0]:
             self.ans = 1
             self.check_ans(right_choice)
@@ -94,7 +99,7 @@ class World():
             self.convert_input(True, tmp)
         if 2000 <= int(self.bet) <= self.heart and not self.is_ans[0]:
             self.can_ans = True
-        if key == arcade.key.ENTER:
+        if key == arcade.key.ENTER and self.is_ans[0]:
             self.next = False
             self.reset()
 
@@ -106,7 +111,7 @@ class World():
         self.bet = 0
         self.tmp = 0
         self.question += 1
-        self.is_ans = [False, None, 0]
+        self.is_ans = [False, None, 0] 
         self.next = False
         self.end_round = False
 
