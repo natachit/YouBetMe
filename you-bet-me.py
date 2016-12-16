@@ -17,10 +17,10 @@ class YouBetMeWindow(arcade.Window):
         self.box_img.set_position(BOX_POS[0][0], BOX_POS[0][1])
         self.box2_img = arcade.Sprite('images/box.png')
         self.box2_img.set_position(BOX_POS[1][0], BOX_POS[1][1])
-        self.heart_img = arcade.Sprite('images/coin.png')
-        self.heart_img.set_position(30, 475)
-        self.heart2_img = arcade.Sprite('images/coin.png')
-        self.heart2_img.set_position(300, 140)
+        self.coin_img = arcade.Sprite('images/coin.png')
+        self.coin_img.set_position(30, 475)
+        self.coin2_img = arcade.Sprite('images/coin.png')
+        self.coin2_img.set_position(300, 140)
         self.right_choice = 0
  
 
@@ -34,7 +34,7 @@ class YouBetMeWindow(arcade.Window):
         if end_status == 0:
             self.box_img.draw()
             self.box2_img.draw()
-            self.heart2_img.draw()
+            self.coin2_img.draw()
             arcade.draw_text(str(self.choice.list[self.world.question-1][0]),
                             BOX_POS[0][0], BOX_POS[0][1], arcade.color.BLACK, 30, width=223, align="center",
                             anchor_x="center", anchor_y="center")
@@ -56,13 +56,13 @@ class YouBetMeWindow(arcade.Window):
             if check_render[0]:
                 if check_render[1]:
                     self.ans_img = arcade.Sprite('images/right.png')
-                    arcade.draw_text("Correct! You got "+str(self.world.bet)+" hearts",
+                    arcade.draw_text("Correct! You got "+str(self.world.bet)+" coins",
                             370, 400, arcade.color.BLACK, 30, width=1000, align="center",
                             anchor_x="center", anchor_y="center")
 
                 if not check_render[1]:
                     self.ans_img = arcade.Sprite('images/wrong.png')
-                    arcade.draw_text("Wrong! You lose "+str(self.world.bet)+" hearts",
+                    arcade.draw_text("Wrong! You lose "+str(self.world.bet)+" coins",
                             370, 400, arcade.color.RED, 30, width=1000, align="center",
                             anchor_x="center", anchor_y="center")
                 self.ans_img.set_position(BOX_POS[check_render[2]][0], BOX_POS[check_render[2]][1])
@@ -71,13 +71,13 @@ class YouBetMeWindow(arcade.Window):
 
             if not self.world.can_ans:
                 if self.world.bet < 2000:
-                    arcade.draw_text('( min '+str(self.world.check_heart())+' )',300,100,arcade.color.RED, 13)
-                if self.world.bet > self.world.heart:
+                    arcade.draw_text('( min '+str(self.world.check_coin())+' )',300,100,arcade.color.RED, 13)
+                if self.world.bet > self.world.coin:
                     arcade.draw_text('  ( Too high )',300,100,arcade.color.RED, 13)
                     
 
-        self.heart_img.draw()
-        arcade.draw_text(str(self.world.heart),60, self.height - 35, arcade.color.WHITE, 20)
+        self.coin_img.draw()
+        arcade.draw_text(str(self.world.coin),60, self.height - 35, arcade.color.WHITE, 20)
 
         if end_status != 0:
             self.world.is_ans[0] = True
@@ -113,7 +113,7 @@ class Choice:
 class World():
     def __init__(self):
         self.choice = Choice()
-        self.heart = 5000
+        self.coin = 5000
         self.question = 1
         self.ans = 0
         self.num_key = {48:0, 49:1, 50:2, 51:3, 52:4, 53:5, 54:6, 55:7, 56:8, 57:9}
@@ -123,17 +123,17 @@ class World():
         self.is_ans = [False, None, 0]    #false=not answer yet, None=right or wrong, 0=right choice
         self.end_status = 0
         self.is_restart = False
-        self.heart_max = self.check_heart
+        self.coin_max = self.check_coin
         self.bg_pix = 'images/bg.png'
 
 
     def on_key_press(self, key, key_modifiers, right_choice):
         if key == arcade.key.A:
-            self.heart = 50000
+            self.coin = 50000
             self.check_ans(right_choice)
 
         if key == arcade.key.S:
-            self.heart = 0
+            self.coin = 0
             self.check_ans(right_choice)
 
         if key == arcade.key.D:
@@ -183,18 +183,18 @@ class World():
 
     def check_ans(self, right_choice):
         if self.ans == right_choice:
-            self.heart += self.bet
+            self.coin += self.bet
             self.is_ans = [True, True, self.ans-1]
 
         if self.ans != right_choice:
-            self.heart -= self.bet
+            self.coin -= self.bet
             self.is_ans = [True, False, self.ans-1]
 
-        if self.heart >= 30000:
+        if self.coin >= 30000:
             self.end_status = 1
             self.bg_pix = 'images/bg_billion.png'
 
-        if self.heart <= 0:
+        if self.coin <= 0:
             self.end_status = 2
             self.bg_pix = 'images/bg_bankrupt.png'
 
@@ -204,14 +204,14 @@ class World():
 
 
     def convert_input(self, is_value, value):
-        x = self.check_heart()
+        x = self.check_coin()
         if not is_value:
             self.bet = int((self.bet-value)/10)
 
         if is_value:
             self.bet = int(self.bet*10+value)
 
-        if self.heart >= self.bet >= x:
+        if self.coin >= self.bet >= x:
             self.can_ans = True
 
         else: 
@@ -222,20 +222,20 @@ class World():
         self.is_restart = True
 
 
-    def check_heart(self):
-        if self.heart >= 3000:
-            self.heart_max = 2000
+    def check_coin(self):
+        if self.coin >= 3000:
+            self.coin_max = 2000
         
-        if 2500 <= self.heart < 3000:
-            self.heart_max = 1500
+        if 2500 <= self.coin < 3000:
+            self.coin_max = 1500
 
-        if 2000 <= self.heart < 2500:
-            self.heart_max = 1000
+        if 2000 <= self.coin < 2500:
+            self.coin_max = 1000
 
-        if self.heart < 2000:
-            self.heart_max = 500
+        if self.coin < 2000:
+            self.coin_max = 500
 
-        return self.heart_max
+        return self.coin_max
 
 
  
