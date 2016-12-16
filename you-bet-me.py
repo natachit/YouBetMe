@@ -12,14 +12,14 @@ class YouBetMeWindow(arcade.Window):
         self.choice = Choice()
         self.world = World()
  
-        arcade.set_background_color(arcade.color.WHITE)
+        arcade.set_background_color(arcade.color.BLACK)
         self.box_img = arcade.Sprite('images/box.png')
         self.box_img.set_position(BOX_POS[0][0], BOX_POS[0][1])
         self.box2_img = arcade.Sprite('images/box.png')
         self.box2_img.set_position(BOX_POS[1][0], BOX_POS[1][1])
-        self.heart_img = arcade.Sprite('images/heart1.png')
+        self.heart_img = arcade.Sprite('images/coin.png')
         self.heart_img.set_position(30, 475)
-        self.heart2_img = arcade.Sprite('images/heart1.png')
+        self.heart2_img = arcade.Sprite('images/coin.png')
         self.heart2_img.set_position(300, 140)
         self.right_choice = 0
  
@@ -28,6 +28,9 @@ class YouBetMeWindow(arcade.Window):
         arcade.start_render()
         end_status = self.world.end_status
         check_render = self.world.is_ans
+        self.bg_img = arcade.Sprite(self.world.bg_pix)
+        self.bg_img.set_position(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+        self.bg_img.draw()
         if end_status == 0:
             self.box_img.draw()
             self.box2_img.draw()
@@ -74,7 +77,7 @@ class YouBetMeWindow(arcade.Window):
                     
 
         self.heart_img.draw()
-        arcade.draw_text(str(self.world.heart),60, self.height - 35, arcade.color.BLACK, 20)
+        arcade.draw_text(str(self.world.heart),60, self.height - 35, arcade.color.WHITE, 20)
 
         if end_status != 0:
             self.world.is_ans[0] = True
@@ -82,11 +85,12 @@ class YouBetMeWindow(arcade.Window):
                 self.world = World()
             arcade.draw_text('Press Enter to play again',230, 210, arcade.color.GRAY, 18)
             if end_status == 1:
-                arcade.draw_text('You are a billionaire!!!',85, 280, arcade.color.BLACK, 40)
+                arcade.draw_text('You are a billionaire!!!',85, 280, arcade.color.WHITE, 40)
             if end_status == 2:
-                arcade.draw_text('Oop! You are a beggar!',65, 280, arcade.color.BLACK, 40)
+                arcade.draw_text('Oop! You are a beggar!',65, 280, arcade.color.WHITE, 40)
             if end_status == 3:
                 arcade.draw_text('You are a commoner',115, 280, arcade.color.BLACK, 40)
+                arcade.draw_text('Press Enter to play again',230, 210, arcade.color.BLACK, 18)
 
 
     def on_key_press(self, key, key_modifiers):
@@ -109,11 +113,21 @@ class World():
         self.end_status = 0
         self.is_restart = False
         self.heart_max = self.check_heart
+        self.bg_pix = 'images/bg.png'
 
 
     def on_key_press(self, key, key_modifiers, right_choice):
-        if key == arcade.key.SPACE:
-            self.end_status = 3
+        if key == arcade.key.A:
+            self.heart = 50000
+            self.check_ans(right_choice)
+
+        if key == arcade.key.S:
+            self.heart = 0
+            self.check_ans(right_choice)
+
+        if key == arcade.key.D:
+            self.question = len(self.choice.list)
+            self.check_ans(right_choice)
 
         if key == arcade.key.C and self.can_ans and not self.is_ans[0]:
             self.ans = right_choice
@@ -165,14 +179,17 @@ class World():
             self.heart -= self.bet
             self.is_ans = [True, False, self.ans-1]
 
-        if self.heart >= 20000:
+        if self.heart >= 30000:
             self.end_status = 1
+            self.bg_pix = 'images/bg_billion.png'
 
         if self.heart <= 0:
             self.end_status = 2
+            self.bg_pix = 'images/bg_beggar.png'
 
         if self.question >= len(self.choice.list):
             self.end_status = 3
+            self.bg_pix = 'images/bg_common.png'
 
 
     def convert_input(self, is_value, value):
@@ -208,6 +225,7 @@ class World():
             self.heart_max = 500
 
         return self.heart_max
+
 
  
 if __name__ == '__main__':
