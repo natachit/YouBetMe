@@ -1,6 +1,6 @@
 import arcade
 import arcade.key
-from choice import Choice
+from random import randint
  
 SCREEN_WIDTH = 750
 SCREEN_HEIGHT = 500
@@ -95,6 +95,18 @@ class YouBetMeWindow(arcade.Window):
     def on_key_press(self, key, key_modifiers):
         self.right_choice = self.choice.random_answer()
         self.world.on_key_press(key, key_modifiers, self.right_choice)
+
+
+
+class Choice:
+    list = [['0','1'],['YES','NO'],['BLACK','WHITE'],
+            ['HEAD','TAIL'],['DAY','NIGHT'],['HOT','COLD'],
+            ['AM','PM'],['HIGH','LOW'],['BIG','SMALL'],
+            ['RIGHT','WRONG'],['GOOD','BAD'],['GET UP','GIVE UP']]
+
+    def random_answer(self):
+        #return 1
+        return randint(0, 1) + 1
 
 
 
