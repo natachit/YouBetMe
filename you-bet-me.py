@@ -71,9 +71,9 @@ class YouBetMeWindow(arcade.Window):
 
             if not self.world.can_ans:
                 if self.world.bet < 2000:
-                    arcade.draw_text('( min '+str(self.world.check_heart())+' )',300,100,arcade.color.GRAY, 12)
+                    arcade.draw_text('( min '+str(self.world.check_heart())+' )',300,100,arcade.color.RED, 13)
                 if self.world.bet > self.world.heart:
-                    arcade.draw_text('  ( Too high )',300,100,arcade.color.RED, 12)
+                    arcade.draw_text('  ( Too high )',300,100,arcade.color.RED, 13)
                     
 
         self.heart_img.draw()
@@ -83,14 +83,13 @@ class YouBetMeWindow(arcade.Window):
             self.world.is_ans[0] = True
             if self.world.is_restart == True:
                 self.world = World()
-            arcade.draw_text('Press Enter to play again',230, 210, arcade.color.GRAY, 18)
+            arcade.draw_text('Press Enter to play again',230, 20, arcade.color.GRAY, 18)
             if end_status == 1:
-                arcade.draw_text('You are a billionaire!!!',85, 280, arcade.color.WHITE, 40)
+                arcade.draw_text('You are a billionaire!!!',85, 250, arcade.color.WHITE, 40)
             if end_status == 2:
-                arcade.draw_text('Oop! You are a beggar!',65, 280, arcade.color.WHITE, 40)
+                arcade.draw_text('Oop! You go bankrupt!',65, 250, arcade.color.WHITE, 40)
             if end_status == 3:
-                arcade.draw_text('You are a commoner',115, 280, arcade.color.BLACK, 40)
-                arcade.draw_text('Press Enter to play again',230, 210, arcade.color.BLACK, 18)
+                arcade.draw_text('You are a commoner',105, 250, arcade.color.BLACK, 40)
 
 
     def on_key_press(self, key, key_modifiers):
@@ -185,7 +184,7 @@ class World():
 
         if self.heart <= 0:
             self.end_status = 2
-            self.bg_pix = 'images/bg_beggar.png'
+            self.bg_pix = 'images/bg_bankrupt.png'
 
         if self.question >= len(self.choice.list):
             self.end_status = 3
