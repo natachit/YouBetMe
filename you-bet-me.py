@@ -1,5 +1,6 @@
 import arcade
 import arcade.key
+import arcade.sound
 from random import randint
  
 SCREEN_WIDTH = 750
@@ -11,7 +12,6 @@ class YouBetMeWindow(arcade.Window):
         super().__init__(width, height)
         self.choice = Choice()
         self.world = World()
- 
         arcade.set_background_color(arcade.color.BLACK)
         self.box_img = arcade.Sprite('images/box.png')
         self.box_img.set_position(BOX_POS[0][0], BOX_POS[0][1])
@@ -22,6 +22,9 @@ class YouBetMeWindow(arcade.Window):
         self.coin2_img = arcade.Sprite('images/coin.png')
         self.coin2_img.set_position(300, 140)
         self.right_choice = 0
+        self.theme_sound = arcade.sound.load_sound('theme.wav')
+        arcade.sound.play_sound(self.theme_sound)
+
  
 
     def on_draw(self):
