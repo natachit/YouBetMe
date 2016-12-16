@@ -68,7 +68,7 @@ class YouBetMeWindow(arcade.Window):
 
             if not self.world.can_ans:
                 if self.world.bet < 2000:
-                    arcade.draw_text('Too low',380,130,arcade.color.RED, 15)
+                    arcade.draw_text('( min '+str(self.world.check_heart())+' )',350,150,arcade.color.GRAY, 12)
                 if self.world.bet > self.world.heart:
                     arcade.draw_text('Too high',380,130,arcade.color.RED, 15)
 
@@ -108,6 +108,7 @@ class World():
         self.is_ans = [False, None, 0]    #false=not answer yet, None=right or wrong, 0=right choice
         self.end_status = 0
         self.is_restart = False
+        self.heart_max = self.check_heart
 
 
     def on_key_press(self, key, key_modifiers, right_choice):
@@ -175,21 +176,38 @@ class World():
 
 
     def convert_input(self, is_value, value):
+        x = self.check_heart()
         if not is_value:
             self.bet = int((self.bet-value)/10)
 
         if is_value:
             self.bet = int(self.bet*10+value)
 
-        if self.heart >= self.bet >= 2000:
+        if self.heart >= self.bet >= x:
             self.can_ans = True
 
         else: 
             self.can_ans = False
 
+
     def reset_hard(self):
         self.is_restart = True
 
+
+    def check_heart(self):
+        if self.heart >= 3000:
+            self.heart_max = 2000
+        
+        if 2500 <= self.heart < 3000:
+            self.heart_max = 1500
+
+        if 2000 <= self.heart < 2500:
+            self.heart_max = 1000
+
+        if self.heart < 2000:
+            self.heart_max = 500
+
+        return self.heart_max
 
  
 if __name__ == '__main__':
