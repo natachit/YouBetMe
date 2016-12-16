@@ -2,9 +2,9 @@ import arcade
 import arcade.key
 from choice import Choice
  
-SCREEN_WIDTH = 850
+SCREEN_WIDTH = 750
 SCREEN_HEIGHT = 500
-BOX_POS = [[305,275],[545, 275]]
+BOX_POS = [[255,275],[495, 275]]
  
 class YouBetMeWindow(arcade.Window):
     def __init__(self, width, height):
@@ -20,7 +20,7 @@ class YouBetMeWindow(arcade.Window):
         self.heart_img = arcade.Sprite('images/heart1.png')
         self.heart_img.set_position(30, 475)
         self.heart2_img = arcade.Sprite('images/heart1.png')
-        self.heart2_img.set_position(350, 140)
+        self.heart2_img.set_position(300, 140)
         self.right_choice = 0
  
 
@@ -33,45 +33,45 @@ class YouBetMeWindow(arcade.Window):
             self.box2_img.draw()
             self.heart2_img.draw()
             arcade.draw_text(str(self.choice.list[self.world.question-1][0]),
-                            305, 275, arcade.color.BLACK, 30, width=223, align="center",
+                            BOX_POS[0][0], BOX_POS[0][1], arcade.color.BLACK, 30, width=223, align="center",
                             anchor_x="center", anchor_y="center")
             arcade.draw_text('Press Left Key',
-                            305, 220, arcade.color.GRAY, 12, width=223, align="center",
+                            BOX_POS[0][0], BOX_POS[0][1]-55, arcade.color.GRAY, 12, width=223, align="center",
                             anchor_x="center", anchor_y="center")
             arcade.draw_text(str(self.choice.list[self.world.question-1][1]),
-                            545, 275, arcade.color.BLACK, 30, width=223, align="center",
+                            BOX_POS[1][0], BOX_POS[1][1], arcade.color.BLACK, 30, width=223, align="center",
                             anchor_x="center", anchor_y="center")
             arcade.draw_text('Press Right Key',
-                            545, 220, arcade.color.GRAY, 12, width=223, align="center",
+                            BOX_POS[1][0], BOX_POS[1][1]-55, arcade.color.GRAY, 12, width=223, align="center",
                             anchor_x="center", anchor_y="center")
             if not self.world.can_ans:
-                arcade.draw_text(': '+str(self.world.bet), 380, 130, arcade.color.RED, 20)
+                arcade.draw_text(': '+str(self.world.bet), 330, 130, arcade.color.RED, 20)
                 
             if self.world.can_ans:
-                arcade.draw_text(': '+str(self.world.bet), 380, 130, arcade.color.BLACK, 20)
+                arcade.draw_text(': '+str(self.world.bet), 330, 130, arcade.color.BLACK, 20)
 
             if check_render[0]:
                 if check_render[1]:
                     self.ans_img = arcade.Sprite('images/right.png')
                     arcade.draw_text("Correct! You got "+str(self.world.bet)+" hearts",
-                            420, 400, arcade.color.BLACK, 30, width=1000, align="center",
+                            370, 400, arcade.color.BLACK, 30, width=1000, align="center",
                             anchor_x="center", anchor_y="center")
 
                 if not check_render[1]:
                     self.ans_img = arcade.Sprite('images/wrong.png')
                     arcade.draw_text("Wrong! You lose "+str(self.world.bet)+" hearts",
-                            420, 400, arcade.color.RED, 30, width=1000, align="center",
+                            370, 400, arcade.color.RED, 30, width=1000, align="center",
                             anchor_x="center", anchor_y="center")
                 self.ans_img.set_position(BOX_POS[check_render[2]][0], BOX_POS[check_render[2]][1])
                 self.ans_img.draw()
-                arcade.draw_text('Press Enter to continue',300,80,arcade.color.GRAY, 15)
+                arcade.draw_text('Press Enter to continue',250,80,arcade.color.GRAY, 15)
 
             if not self.world.can_ans:
                 if self.world.bet < 2000:
-                    arcade.draw_text('( min '+str(self.world.check_heart())+' )',350,100,arcade.color.GRAY, 12)
+                    arcade.draw_text('( min '+str(self.world.check_heart())+' )',300,100,arcade.color.GRAY, 12)
                 if self.world.bet > self.world.heart:
-                    arcade.draw_text('  ( Too high )',350,100,arcade.color.RED, 12)
-
+                    arcade.draw_text('  ( Too high )',300,100,arcade.color.RED, 12)
+                    
 
         self.heart_img.draw()
         arcade.draw_text(str(self.world.heart),60, self.height - 35, arcade.color.BLACK, 20)
@@ -80,13 +80,13 @@ class YouBetMeWindow(arcade.Window):
             self.world.is_ans[0] = True
             if self.world.is_restart == True:
                 self.world = World()
-            arcade.draw_text('Press Enter to play again',250, 220, arcade.color.GRAY, 20)
+            arcade.draw_text('Press Enter to play again',230, 210, arcade.color.GRAY, 18)
             if end_status == 1:
-                arcade.draw_text('You are a billionaire!!!',50, 290, arcade.color.BLACK, 50)
+                arcade.draw_text('You are a billionaire!!!',85, 280, arcade.color.BLACK, 40)
             if end_status == 2:
-                arcade.draw_text('Oop! You are a beggar!',30, 290, arcade.color.BLACK, 50)
+                arcade.draw_text('Oop! You are a beggar!',65, 280, arcade.color.BLACK, 40)
             if end_status == 3:
-                arcade.draw_text('You are a commoner',80, 290, arcade.color.BLACK, 50)
+                arcade.draw_text('You are a commoner',115, 280, arcade.color.BLACK, 40)
 
 
     def on_key_press(self, key, key_modifiers):
