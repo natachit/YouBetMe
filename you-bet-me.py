@@ -22,10 +22,7 @@ class YouBetMeWindow(arcade.Window):
         self.coin2_img = arcade.Sprite('images/coin.png')
         self.coin2_img.set_position(300, 140)
         self.right_choice = 0
-        self.theme_sound = arcade.sound.load_sound('theme.wav')
-        arcade.sound.play_sound(self.theme_sound)
 
- 
 
     def on_draw(self):
         arcade.start_render()
@@ -128,6 +125,8 @@ class World():
         self.is_restart = False
         self.coin_max = self.check_coin
         self.bg_pix = 'images/bg.png'
+        self.theme_sound = arcade.sound.load_sound('theme.wav')
+        arcade.sound.play_sound(self.theme_sound)
 
 
     def on_key_press(self, key, key_modifiers, right_choice):
