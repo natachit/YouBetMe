@@ -8,8 +8,10 @@ SCREEN_HEIGHT = 500
 BOX_POS = [[255,275],[495, 275]]
  
 class YouBetMeWindow(arcade.Window):
+
     def __init__(self, width, height):
         super().__init__(width, height)
+        self.time = 320
         self.choice = Choice()
         self.world = World()
         arcade.set_background_color(arcade.color.BLACK)
@@ -22,10 +24,7 @@ class YouBetMeWindow(arcade.Window):
         self.coin2_img = arcade.Sprite('images/coin.png')
         self.coin2_img.set_position(300, 140)
         self.right_choice = 0
-        self.theme_sound = arcade.sound.load_sound('theme.wav')
-        arcade.sound.play_sound(self.theme_sound)
 
- 
 
     def on_draw(self):
         arcade.start_render()
@@ -38,6 +37,11 @@ class YouBetMeWindow(arcade.Window):
             self.box_img.draw()
             self.box2_img.draw()
             self.coin2_img.draw()
+            if (self.time < 320):
+                self.time +=1
+            else:
+                self.world.play_bgsound()
+                self.time = 0
             arcade.draw_text(str(self.choice.list[self.world.question-1][0]),
                             BOX_POS[0][0], BOX_POS[0][1], arcade.color.BLACK, 30, width=223, align="center",
                             anchor_x="center", anchor_y="center")
@@ -78,11 +82,11 @@ class YouBetMeWindow(arcade.Window):
                 if self.world.bet > self.world.coin:
                     arcade.draw_text('  ( Too high )',300,100,arcade.color.RED, 13)
                     
-
         self.coin_img.draw()
         arcade.draw_text(str(self.world.coin),60, self.height - 35, arcade.color.WHITE, 20)
 
         if end_status != 0:
+            self.time = 0
             self.world.is_ans[0] = True
             if self.world.is_restart == True:
                 self.world = World()
@@ -128,6 +132,11 @@ class World():
         self.is_restart = False
         self.coin_max = self.check_coin
         self.bg_pix = 'images/bg.png'
+        self.theme_sound = arcade.sound.load_sound('sounds/theme.wav')
+        self.end_sound = arcade.sound.load_sound('sounds/end.wav')
+        self.first = 0
+        self.theme = self.theme_sound.play()
+        self.theme.pause()
 
 
     def on_key_press(self, key, key_modifiers, right_choice):
@@ -171,6 +180,7 @@ class World():
 
         if key == arcade.key.ENTER and self.is_ans[0]:
             if self.end_status != 0:
+                self.check_end(0)
                 self.reset_hard()
             else:
                 self.reset()
@@ -205,6 +215,8 @@ class World():
             self.end_status = 3
             self.bg_pix = 'images/bg_common.png'
 
+        self.check_end(self.end_status)
+
 
     def convert_input(self, is_value, value):
         x = self.check_coin()
@@ -223,6 +235,7 @@ class World():
 
     def reset_hard(self):
         self.is_restart = True
+        self.play_bgsound()
 
 
     def check_coin(self):
@@ -239,6 +252,22 @@ class World():
             self.coin_max = 500
 
         return self.coin_max
+
+
+    def play_bgsound(self):
+        if (self.first > 0):
+            self.theme.pause()
+        self.theme = self.theme_sound.play()
+        self.first = 1
+
+
+    def check_end(self, x):
+        if(x != 0):
+            self.theme.pause()
+            self.end = self.end_sound.play()
+        else:
+            self.end.pause()
+
 
 
  
