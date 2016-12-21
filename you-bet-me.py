@@ -41,7 +41,6 @@ class YouBetMeWindow(arcade.Window):
             self.box_img.draw()
             self.box2_img.draw()
             self.coin2_img.draw()
-            arcade.draw_text((str(self.time)), 30, 10, arcade.color.RED, 20)
             arcade.draw_text(str(self.choice.list[self.world.question-1][0]),
                             BOX_POS[0][0], BOX_POS[0][1], arcade.color.BLACK, 30, width=223, align="center",
                             anchor_x="center", anchor_y="center")
