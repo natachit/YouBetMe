@@ -33,7 +33,7 @@ class YouBetMeWindow(arcade.Window):
         self.bg_img = arcade.Sprite(self.world.bg_pix)
         self.bg_img.set_position(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
         self.bg_img.draw()
-        if end_status == 0:
+        if end_status == 0:     #play game
             if self.time >= 32:
                 self.world.status_sound('theme', False)
                 self.world.status_sound('theme', True)
@@ -53,13 +53,13 @@ class YouBetMeWindow(arcade.Window):
             arcade.draw_text('Press Right Key',
                             BOX_POS[1][0], BOX_POS[1][1]-55, arcade.color.GRAY, 12, width=223, align="center",
                             anchor_x="center", anchor_y="center")
-            if not self.world.can_ans:
+            if not self.world.can_ans:    #not enough coin
                 arcade.draw_text(': '+str(self.world.bet), 330, 130, arcade.color.RED, 20)
                 
-            if self.world.can_ans:
+            if self.world.can_ans:        #enough coin
                 arcade.draw_text(': '+str(self.world.bet), 330, 130, arcade.color.BLACK, 20)
 
-            if check_render[0]:
+            if check_render[0]:           #show result
                 if check_render[1]:
                     self.ans_img = arcade.Sprite('images/right.png')
                     arcade.draw_text("Correct! You got "+str(self.world.bet)+" coins",
@@ -84,17 +84,20 @@ class YouBetMeWindow(arcade.Window):
         self.coin_img.draw()
         arcade.draw_text(str(self.world.coin),60, self.height - 35, arcade.color.WHITE, 20)
 
-        if end_status != 0:
+        if end_status != 0:     #end game
             self.world.is_ans[0] = True
             if self.world.is_restart == True:
                 self.world = World()
             arcade.draw_text('Press Enter to play again',230, 20, arcade.color.GRAY, 18)
             if end_status == 1:
-                arcade.draw_text('You are a billionaire!!!',85, 250, arcade.color.WHITE, 40)
+                arcade.draw_text('You are a billionaire!!!',SCREEN_WIDTH/2, SCREEN_HEIGHT/2, arcade.color.WHITE, 40, 
+                            width=SCREEN_WIDTH, align="center", anchor_x="center", anchor_y="center")
             if end_status == 2:
-                arcade.draw_text('Oop! You go bankrupt!',65, 250, arcade.color.WHITE, 40)
+                arcade.draw_text('Oop! You go bankrupt!',SCREEN_WIDTH/2, SCREEN_HEIGHT/2, arcade.color.WHITE, 40, 
+                            width=SCREEN_WIDTH, align="center", anchor_x="center", anchor_y="center")
             if end_status == 3:
-                arcade.draw_text('You are a commoner',105, 250, arcade.color.BLACK, 40)
+                arcade.draw_text('You are a commoner',SCREEN_WIDTH/2, SCREEN_HEIGHT/2, arcade.color.WHITE, 40, 
+                            width=SCREEN_WIDTH, align="center", anchor_x="center", anchor_y="center")
 
 
     def on_key_press(self, key, key_modifiers):
