@@ -22,6 +22,7 @@ class YouBetMeWindow(arcade.Window):
         self.coin2_img = arcade.Sprite('images/coin.png')
         self.coin2_img.set_position(300, 140)
         self.right_choice = 0
+        self.time = 0
 
 
     def on_draw(self):
@@ -32,6 +33,11 @@ class YouBetMeWindow(arcade.Window):
         self.bg_img.set_position(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
         self.bg_img.draw()
         if end_status == 0:
+            if (self.time >= 320):
+                self.world.play_bgsound()
+                self.time = 0
+            else:
+                self.time += 1
             self.box_img.draw()
             self.box2_img.draw()
             self.coin2_img.draw()
@@ -79,6 +85,7 @@ class YouBetMeWindow(arcade.Window):
         arcade.draw_text(str(self.world.coin),60, self.height - 35, arcade.color.WHITE, 20)
 
         if end_status != 0:
+            self.world.play_endsound(True)
             self.world.is_ans[0] = True
             if self.world.is_restart == True:
                 self.world = World()
@@ -124,6 +131,9 @@ class World():
         self.is_restart = False
         self.coin_max = self.check_coin
         self.bg_pix = 'images/bg.png'
+        self.theme_sound = arcade.sound.load_sound('sounds/theme sound.wav')
+        arcade.sound.play_sound(theme_sound)
+        self.end_sound = arcade.sound.load_sound('sounds/end.wav')
 
 
     def on_key_press(self, key, key_modifiers, right_choice):
@@ -167,6 +177,7 @@ class World():
 
         if key == arcade.key.ENTER and self.is_ans[0]:
             if self.end_status != 0:
+                self.play_endsound(False)
                 self.reset_hard()
             else:
                 self.reset()
@@ -236,6 +247,18 @@ class World():
 
         return self.coin_max
 
+    
+    def play_bgsound(self):
+        theme_sound.pause()
+        arcade.sound.play_sound(theme_sound)
+
+
+    def play_endsound(self, true):
+        if (true):
+            theme_sound.pause()
+            arcade.sound.play_sound(end_sound)
+        else
+            end_sound.pause()
 
  
 if __name__ == '__main__':
