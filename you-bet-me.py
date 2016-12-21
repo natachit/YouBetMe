@@ -7,9 +7,9 @@ SCREEN_WIDTH = 750
 SCREEN_HEIGHT = 500
 BOX_POS = [[255,275],[495, 275]]
 LIST = [['0','1'],['YES','NO'],['BLACK','WHITE'],
-            ['HEAD','TAIL'],['DAY','NIGHT'],['HOT','COLD'],
-            ['AM','PM'],['HIGH','LOW'],['BIG','SMALL'],
-            ['RIGHT','WRONG'],['GOOD','BAD'],['GET UP','GIVE UP']]
+        ['DAY','NIGHT'],['HOT','COLD'],['AM','PM'],
+        ['BIG','SMALL'],['RIGHT','WRONG'],['GOOD','BAD'],
+        ['TRUE','FALSE'],['COFFEE','TEA'],['LEFT','RIGHT']]
  
 class YouBetMeWindow(arcade.Window):
     def __init__(self, width, height):
@@ -247,7 +247,7 @@ class World():
 
 
     def check_coin(self):
-        if self.coin <= 15000:
+        if self.coin >= 15000:
             self.coin_max = 5000
 
         if 10000 <= self.coin < 15000:
