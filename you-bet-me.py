@@ -79,7 +79,7 @@ class YouBetMeWindow(arcade.Window):
                 arcade.draw_text('Press Enter to continue',250,80,arcade.color.GRAY, 15)
 
             if not self.world.can_ans:
-                if self.world.bet < 2000:
+                if self.world.bet < self.world.check_coin():
                     arcade.draw_text('( min '+str(self.world.check_coin())+' )',300,100,arcade.color.RED, 13)
                 if self.world.bet > self.world.coin:
                     arcade.draw_text('  ( Too high )',300,100,arcade.color.RED, 13)
@@ -229,7 +229,8 @@ class World():
     def convert_input(self, is_value, value):
         x = self.check_coin()
         if not is_value:
-            self.bet = int((self.bet-value)/10)
+            if self.bet > 0:
+                self.bet = int((self.bet-value)/10)
 
         if is_value:
             self.bet = int(self.bet*10+value)
@@ -246,10 +247,16 @@ class World():
 
 
     def check_coin(self):
-        if self.coin >= 3000:
+        if self.coin <= 15000:
+            self.coin_max = 5000
+
+        if 10000 <= self.coin < 15000:
+            self.coin_max = 3000
+
+        if 5000 <= self.coin < 10000:
             self.coin_max = 2000
         
-        if 2500 <= self.coin < 3000:
+        if 2500 <= self.coin < 5000:
             self.coin_max = 1500
 
         if 2000 <= self.coin < 2500:
