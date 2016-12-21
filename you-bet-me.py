@@ -34,15 +34,14 @@ class YouBetMeWindow(arcade.Window):
         self.bg_img.set_position(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
         self.bg_img.draw()
         if end_status == 0:
-            if (self.time >= 320):
+            if self.time >= 32:
                 self.world.status_sound('theme', False)
                 self.world.status_sound('theme', True)
                 self.time = 0
-            else:
-                self.time += 1
             self.box_img.draw()
             self.box2_img.draw()
             self.coin2_img.draw()
+            arcade.draw_text((str(self.time)), 30, 10, arcade.color.RED, 20)
             arcade.draw_text(str(self.choice.list[self.world.question-1][0]),
                             BOX_POS[0][0], BOX_POS[0][1], arcade.color.BLACK, 30, width=223, align="center",
                             anchor_x="center", anchor_y="center")
@@ -104,6 +103,10 @@ class YouBetMeWindow(arcade.Window):
         self.world.on_key_press(key, key_modifiers, self.right_choice)
 
 
+    def animate(self, delta_time):
+        self.time += delta_time
+
+
 
 class Choice:
     list = [['0','1'],['YES','NO'],['BLACK','WHITE'],
@@ -134,6 +137,8 @@ class World():
         self.bg_pix = 'images/bg.png'
         self.theme_sound = arcade.sound.load_sound('sounds/theme.wav')
         self.end_sound = arcade.sound.load_sound('sounds/end.wav')
+        self.right_sound = arcade.sound.load_sound('sounds/right.wav')
+        self.wrong_sound = arcade.sound.load_sound('sounds/wrong.wav')
         self.status_sound('theme', True)
 
 
@@ -196,10 +201,12 @@ class World():
         if self.ans == right_choice:
             self.coin += self.bet
             self.is_ans = [True, True, self.ans-1]
+            self.right = self.right_sound.play()
 
         if self.ans != right_choice:
             self.coin -= self.bet
             self.is_ans = [True, False, self.ans-1]
+            self.wrong = self.wrong_sound.play()
 
         if self.coin >= 30000:
             self.end_status = 1
@@ -254,13 +261,13 @@ class World():
 
 
     def status_sound(self, sound, status):
-        if (sound == 'theme'):
-            if (status == True):
+        if sound == 'theme':
+            if status == True:
                 self.theme = self.theme_sound.play()
             else:
                 self.theme.pause()
-        if (sound == 'end'):
-            if (status == True):
+        if sound == 'end':
+            if status == True:
                 self.end = self.end_sound.play()
             else:
                 self.end.pause()
