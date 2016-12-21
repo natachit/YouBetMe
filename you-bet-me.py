@@ -104,8 +104,7 @@ class YouBetMeWindow(arcade.Window):
 
 
     def on_key_press(self, key, key_modifiers):
-        self.right_choice = self.world.random_answer()
-        self.world.on_key_press(key, key_modifiers, self.right_choice)
+        self.world.on_key_press(key, key_modifiers)
 
 
     def animate(self, delta_time):
@@ -126,6 +125,7 @@ class World():
         self.end_status = 0
         self.is_restart = False
         self.coin_max = self.check_coin
+        self.right_choice = self.random_answer()
         self.bg_pix = 'images/bg.png'
         self.theme_sound = arcade.sound.load_sound('sounds/theme.wav')
         self.end_sound = arcade.sound.load_sound('sounds/end.wav')
@@ -135,41 +135,40 @@ class World():
 
 
     def random_answer(self):
-        #return 1
-        return randint(0, 1) + 1
+        return randint(1, 2)
 
 
-    def on_key_press(self, key, key_modifiers, right_choice):
+    def on_key_press(self, key, key_modifiers):
         if key == arcade.key.A:
             self.coin = 50000
-            self.check_ans(right_choice)
+            self.check_ans()
 
         if key == arcade.key.S:
             self.coin = 0
-            self.check_ans(right_choice)
+            self.check_ans()
 
         if key == arcade.key.D:
             self.question = len(LIST)
-            self.check_ans(right_choice)
+            self.check_ans()
 
         if key == arcade.key.C and self.can_ans and not self.is_ans[0]:
-            self.ans = right_choice
-            self.check_ans(right_choice)
+            self.ans = self.right_choice
+            self.check_ans()
 
         if key == arcade.key.V and self.can_ans and not self.is_ans[0]:
-            if right_choice == 1:
+            if self.right_choice == 1:
                 self.ans = 2
-            if right_choice == 2:
+            if self.right_choice == 2:
                 self.ans = 1
-            self.check_ans(right_choice)
+            self.check_ans()
 
         if key == arcade.key.LEFT and self.can_ans and not self.is_ans[0]:
             self.ans = 1
-            self.check_ans(right_choice)
+            self.check_ans()
 
         if key == arcade.key.RIGHT and self.can_ans and not self.is_ans[0]:
             self.ans = 2
-            self.check_ans(right_choice)
+            self.check_ans()
 
         if key == arcade.key.BACKSPACE and not self.is_ans[0]:
             self.convert_input(False, self.tmp)
@@ -192,19 +191,24 @@ class World():
         self.bet = 0
         self.question += 1
         self.is_ans = [False, None, 0]
+        self.right_choice = self.random_answer()
 
 
-    def check_ans(self, right_choice):
-        if self.ans == right_choice:
+    def check_ans(self):
+        if self.ans == self.right_choice:
             self.coin += self.bet
             self.is_ans = [True, True, self.ans-1]
             self.right = self.right_sound.play()
 
-        if self.ans != right_choice:
+        if self.ans != self.right_choice:
             self.coin -= self.bet
             self.is_ans = [True, False, self.ans-1]
             self.wrong = self.wrong_sound.play()
 
+        self.check_status()
+
+
+    def check_status(self):
         if self.coin >= 30000:
             self.end_status = 1
             self.bg_pix = 'images/bg_billion.png'
@@ -270,6 +274,7 @@ class World():
                 self.end.pause()
 
  
+
 if __name__ == '__main__':
     window = YouBetMeWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
     arcade.run()
