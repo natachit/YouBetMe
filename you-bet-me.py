@@ -75,7 +75,6 @@ class YouBetMeWindow(arcade.Window):
                 if self.world.bet > self.world.coin:
                     arcade.draw_text('  ( Too high )',300,100,arcade.color.RED, 13)
                     
-
         self.coin_img.draw()
         arcade.draw_text(str(self.world.coin),60, self.height - 35, arcade.color.WHITE, 20)
 
@@ -125,8 +124,6 @@ class World():
         self.is_restart = False
         self.coin_max = self.check_coin
         self.bg_pix = 'images/bg.png'
-        self.theme_sound = arcade.sound.load_sound('theme.wav')
-        arcade.sound.play_sound(self.theme_sound)
 
 
     def on_key_press(self, key, key_modifiers, right_choice):
