@@ -6,11 +6,14 @@ from random import randint
 SCREEN_WIDTH = 750
 SCREEN_HEIGHT = 500
 BOX_POS = [[255,275],[495, 275]]
+LIST = [['0','1'],['YES','NO'],['BLACK','WHITE'],
+            ['HEAD','TAIL'],['DAY','NIGHT'],['HOT','COLD'],
+            ['AM','PM'],['HIGH','LOW'],['BIG','SMALL'],
+            ['RIGHT','WRONG'],['GOOD','BAD'],['GET UP','GIVE UP']]
  
 class YouBetMeWindow(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
-        self.choice = Choice()
         self.world = World()
         arcade.set_background_color(arcade.color.BLACK)
         self.box_img = arcade.Sprite('images/box.png')
@@ -41,13 +44,13 @@ class YouBetMeWindow(arcade.Window):
             self.box_img.draw()
             self.box2_img.draw()
             self.coin2_img.draw()
-            arcade.draw_text(str(self.choice.list[self.world.question-1][0]),
+            arcade.draw_text(str(LIST[self.world.question-1][0]),
                             BOX_POS[0][0], BOX_POS[0][1], arcade.color.BLACK, 30, width=223, align="center",
                             anchor_x="center", anchor_y="center")
             arcade.draw_text('Press Left Key',
                             BOX_POS[0][0], BOX_POS[0][1]-55, arcade.color.GRAY, 12, width=223, align="center",
                             anchor_x="center", anchor_y="center")
-            arcade.draw_text(str(self.choice.list[self.world.question-1][1]),
+            arcade.draw_text(str(LIST[self.world.question-1][1]),
                             BOX_POS[1][0], BOX_POS[1][1], arcade.color.BLACK, 30, width=223, align="center",
                             anchor_x="center", anchor_y="center")
             arcade.draw_text('Press Right Key',
@@ -101,7 +104,7 @@ class YouBetMeWindow(arcade.Window):
 
 
     def on_key_press(self, key, key_modifiers):
-        self.right_choice = self.choice.random_answer()
+        self.right_choice = self.world.random_answer()
         self.world.on_key_press(key, key_modifiers, self.right_choice)
 
 
@@ -110,21 +113,8 @@ class YouBetMeWindow(arcade.Window):
 
 
 
-class Choice:
-    list = [['0','1'],['YES','NO'],['BLACK','WHITE'],
-            ['HEAD','TAIL'],['DAY','NIGHT'],['HOT','COLD'],
-            ['AM','PM'],['HIGH','LOW'],['BIG','SMALL'],
-            ['RIGHT','WRONG'],['GOOD','BAD'],['GET UP','GIVE UP']]
-
-    def random_answer(self):
-        #return 1
-        return randint(0, 1) + 1
-
-
-
 class World():
     def __init__(self):
-        self.choice = Choice()
         self.coin = 5000
         self.question = 1
         self.ans = 0
@@ -144,6 +134,11 @@ class World():
         self.status_sound('theme', True)
 
 
+    def random_answer(self):
+        #return 1
+        return randint(0, 1) + 1
+
+
     def on_key_press(self, key, key_modifiers, right_choice):
         if key == arcade.key.A:
             self.coin = 50000
@@ -154,7 +149,7 @@ class World():
             self.check_ans(right_choice)
 
         if key == arcade.key.D:
-            self.question = len(self.choice.list)
+            self.question = len(LIST)
             self.check_ans(right_choice)
 
         if key == arcade.key.C and self.can_ans and not self.is_ans[0]:
@@ -218,7 +213,7 @@ class World():
             self.end_status = 2
             self.bg_pix = 'images/bg_bankrupt.png'
 
-        if self.question >= len(self.choice.list):
+        if self.question >= len(LIST):
             self.end_status = 3
             self.bg_pix = 'images/bg_common.png'
 
