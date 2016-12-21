@@ -23,6 +23,7 @@ class YouBetMeWindow(arcade.Window):
         self.coin2_img.set_position(300, 140)
         self.right_choice = 0
         self.time = 0
+        self.first = False
 
 
     def on_draw(self):
@@ -34,7 +35,8 @@ class YouBetMeWindow(arcade.Window):
         self.bg_img.draw()
         if end_status == 0:
             if (self.time >= 320):
-                self.world.play_bgsound()
+                self.world.status_sound('theme', False)
+                self.world.status_sound('theme', True)
                 self.time = 0
             else:
                 self.time += 1
@@ -85,7 +87,6 @@ class YouBetMeWindow(arcade.Window):
         arcade.draw_text(str(self.world.coin),60, self.height - 35, arcade.color.WHITE, 20)
 
         if end_status != 0:
-            self.world.play_endsound(True)
             self.world.is_ans[0] = True
             if self.world.is_restart == True:
                 self.world = World()
@@ -131,9 +132,9 @@ class World():
         self.is_restart = False
         self.coin_max = self.check_coin
         self.bg_pix = 'images/bg.png'
-        self.theme_sound = arcade.sound.load_sound('sounds/theme sound.wav')
-        arcade.sound.play_sound(theme_sound)
+        self.theme_sound = arcade.sound.load_sound('sounds/theme.wav')
         self.end_sound = arcade.sound.load_sound('sounds/end.wav')
+        self.status_sound('theme', True)
 
 
     def on_key_press(self, key, key_modifiers, right_choice):
@@ -177,7 +178,7 @@ class World():
 
         if key == arcade.key.ENTER and self.is_ans[0]:
             if self.end_status != 0:
-                self.play_endsound(False)
+                self.status_sound('end', False)
                 self.reset_hard()
             else:
                 self.reset()
@@ -211,6 +212,10 @@ class World():
         if self.question >= len(self.choice.list):
             self.end_status = 3
             self.bg_pix = 'images/bg_common.png'
+
+        if self.end_status != 0:
+            self.status_sound('theme', False)
+            self.status_sound('end', True)
 
 
     def convert_input(self, is_value, value):
@@ -247,18 +252,18 @@ class World():
 
         return self.coin_max
 
-    
-    def play_bgsound(self):
-        theme_sound.pause()
-        arcade.sound.play_sound(theme_sound)
 
-
-    def play_endsound(self, true):
-        if (true):
-            theme_sound.pause()
-            arcade.sound.play_sound(end_sound)
-        else
-            end_sound.pause()
+    def status_sound(self, sound, status):
+        if (sound == 'theme'):
+            if (status == True):
+                self.theme = self.theme_sound.play()
+            else:
+                self.theme.pause()
+        if (sound == 'end'):
+            if (status == True):
+                self.end = self.end_sound.play()
+            else:
+                self.end.pause()
 
  
 if __name__ == '__main__':
