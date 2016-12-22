@@ -171,7 +171,7 @@ class World():
             self.check_ans()
 
         if key == arcade.key.BACKSPACE and not self.is_ans[0]:
-            self.convert_input(False, self.tmp)
+            self.convert_input(False, 0)
 
         if 48 <= key <= 57 and not self.is_ans[0]:
             self.tmp = self.num_key[key]
@@ -230,7 +230,7 @@ class World():
         x = self.check_coin()
         if not is_value:
             if self.bet > 0:
-                self.bet = int((self.bet-value)/10)
+                self.bet = int(self.bet/10)
 
         if is_value:
             self.bet = int(self.bet*10+value)
