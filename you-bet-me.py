@@ -139,15 +139,15 @@ class World():
 
 
     def on_key_press(self, key, key_modifiers):
-        if key == arcade.key.A:
+        if key == arcade.key.I:
             self.coin = 50000
             self.check_ans()
 
-        if key == arcade.key.S:
+        if key == arcade.key.O:
             self.coin = 0
             self.check_ans()
 
-        if key == arcade.key.D:
+        if key == arcade.key.P:
             self.question = len(LIST)
             self.check_ans()
 
