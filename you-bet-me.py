@@ -247,29 +247,7 @@ class World():
 
 
     def check_coin(self):
-        if self.coin >= 15000:
-            self.coin_max = 5000
-
-        if 10000 <= self.coin < 15000:
-            self.coin_max = 3000
-
-        if 5000 <= self.coin < 10000:
-            self.coin_max = 2000
-        
-        if 2500 <= self.coin < 5000:
-            self.coin_max = 1500
-
-        if 2000 <= self.coin < 2500:
-            self.coin_max = 1000
-
-        if 800 <= self.coin < 2000:
-            self.coin_max = 500
-
-        if 10 <= self.coin < 800:
-            self.coin_max = int(self.coin/10)
-
-        if self.coin < 10:
-            self.coin = 1
+        self.coin_max = int(self.coin*0.4/100)*100
 
         return self.coin_max
 
