@@ -209,7 +209,7 @@ class World():
 
 
     def check_status(self):
-        if self.coin >= 30000:
+        if self.coin >= 20000:
             self.end_status = 1
             self.bg_pix = 'images/bg_billion.png'
 
@@ -262,8 +262,14 @@ class World():
         if 2000 <= self.coin < 2500:
             self.coin_max = 1000
 
-        if self.coin < 2000:
+        if 800 <= self.coin < 2000:
             self.coin_max = 500
+
+        if 10 <= self.coin < 800:
+            self.coin_max = int(self.coin/10)
+
+        if self.coin < 10:
+            self.coin = 1
 
         return self.coin_max
 
