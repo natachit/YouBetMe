@@ -125,7 +125,6 @@ class World():
         self.end_status = 0
         self.is_restart = False
         self.coin_max = self.check_coin
-        self.right_choice = self.random_answer()
         self.bg_pix = 'images/bg.png'
         self.theme_sound = arcade.sound.load_sound('sounds/theme.wav')
         self.end_sound = arcade.sound.load_sound('sounds/end.wav')
@@ -135,7 +134,7 @@ class World():
 
 
     def random_answer(self):
-        return randint(1, 2)
+        return randint(1, 10)
 
 
     def on_key_press(self, key, key_modifiers):
@@ -191,19 +190,17 @@ class World():
         self.bet = 0
         self.question += 1
         self.is_ans = [False, None, 0]
-        self.right_choice = self.random_answer()
 
 
     def check_ans(self):
-        if self.ans == self.right_choice:
-            self.coin += self.bet
-            self.is_ans = [True, True, self.ans-1]
-            self.right = self.right_sound.play()
-
-        if self.ans != self.right_choice:
+        if self.random_answer() <= 4:
             self.coin -= self.bet
             self.is_ans = [True, False, self.ans-1]
             self.wrong = self.wrong_sound.play()
+        else:
+            self.coin += self.bet
+            self.is_ans = [True, True, self.ans-1]
+            self.right = self.right_sound.play()
 
         self.check_status()
 
