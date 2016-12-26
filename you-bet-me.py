@@ -138,36 +138,33 @@ class World():
 
 
     def on_key_press(self, key, key_modifiers):
-        if key == arcade.key.I:
+        if key == arcade.key.I:                                             #test end status billion
             self.coin = 50000
-            self.check_ans()
+            self.check_ans(self.random_answer())
 
-        if key == arcade.key.O:
+        if key == arcade.key.O:                                             #test end status bankrupt
             self.coin = 0
-            self.check_ans()
+            self.check_ans(self.random_answer())
 
-        if key == arcade.key.P:
+        if key == arcade.key.P:                                             #test end status common
             self.question = len(LIST)
-            self.check_ans()
+            self.check_ans(self.random_answer())
 
-        if key == arcade.key.C and self.can_ans and not self.is_ans[0]:
-            self.ans = self.right_choice
-            self.check_ans()
+        if key == arcade.key.C and self.can_ans and not self.is_ans[0]:    #test true
+            self.ans = 1
+            self.check_ans(9)
 
-        if key == arcade.key.V and self.can_ans and not self.is_ans[0]:
-            if self.right_choice == 1:
-                self.ans = 2
-            if self.right_choice == 2:
-                self.ans = 1
-            self.check_ans()
+        if key == arcade.key.V and self.can_ans and not self.is_ans[0]:    #test false
+            self.ans = 2
+            self.check_ans(4)
 
         if key == arcade.key.LEFT and self.can_ans and not self.is_ans[0]:
             self.ans = 1
-            self.check_ans()
+            self.check_ans(self.random_answer())
 
         if key == arcade.key.RIGHT and self.can_ans and not self.is_ans[0]:
             self.ans = 2
-            self.check_ans()
+            self.check_ans(self.random_answer())
 
         if key == arcade.key.BACKSPACE and not self.is_ans[0]:
             self.convert_input(False, 0)
@@ -192,8 +189,8 @@ class World():
         self.is_ans = [False, None, 0]
 
 
-    def check_ans(self):
-        if self.random_answer() <= 4:
+    def check_ans(self, random):
+        if random <= 4:
             self.coin -= self.bet
             self.is_ans = [True, False, self.ans-1]
             self.wrong = self.wrong_sound.play()
@@ -244,7 +241,16 @@ class World():
 
 
     def check_coin(self):
-        self.coin_max = int(self.coin*0.4/100)*100
+        if self.coin < 25:
+            self.coin_max = int(self.coin*0.4)
+            if self.coin_max <= 0:
+                self.coin_max = 1
+
+        elif self.coin < 1000:
+            self.coin_max = int(self.coin*0.4/10)*10
+
+        else:
+            self.coin_max = int(self.coin*0.4/100)*100
 
         return self.coin_max
 
